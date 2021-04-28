@@ -1,14 +1,23 @@
-let ls;
-let coreY;
+var ls;
+var coreY;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  
+  createCanvas(windowWidth, windowHeight - 45);
+
   this.ls = [];
   this.coreY = height * 0.7;
-  this.ls.push(new Source(0, height/2, this.coreY));
-  this.ls[0].setIndexes(0.11, 1.3);
-  
+
+  let n1Input = select('#n1Input');
+  n1Input.size(width * 0.6);
+  n1Input.value('1.00');
+
+  let n2Input = select('#n2Input');
+  n2Input.size(width * 0.6);
+  n2Input.value('1.00');
+
+  n1Input.input(this.updateN1);
+  n2Input.input(this.updateN2);
+
   background(0);
   stroke(0, 0, 25);
   strokeWeight(2);
@@ -24,7 +33,23 @@ function draw() {
   line(0, this.coreY, width, this.coreY);
 }
 
+function updateN1() {
+  let n1Input = select('#n1Input');
+  let n1 = n1Input.value() / 100.0;
+  let tmp = select('#n1Value');
+  tmp.html("n1 : " + n1);
+}
+
+function updateN2() {
+  let n2Input = select('#n2Input');
+  let n2 = n2Input.value() / 100.0;
+  let tmp = select('#n2Value');
+  tmp.html("n2 : " + n2);
+}
+
 function mouseClicked() {
-  this.ls.push(new Source(mouseX, mouseY, this.coreY));
-  this.ls[this.ls.length - 1].setIndexes(0.11, 1.3);
+  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+    this.ls.push(new Source(mouseX, mouseY, this.coreY));
+    this.ls[this.ls.length - 1].setIndexes(select('#n1Input').value(), select('#n2Input').value());
+  }
 }
